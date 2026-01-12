@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventaire Audio & Musical - Église Camps d'Adoration Canaan</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-bg: #f8f9fa;
+            --dark-bg: #34495e;
+            --border-color: #dee2e6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: var(--light-bg);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* En-tête */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-bg));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Cartes d'inventaire */
+        .inventory-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .inventory-section h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .inventory-section h3 {
+            color: var(--dark-bg);
+            margin: 1rem 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+        
+        /* Liste d'équipements */
+        .equipment-list {
+            list-style-type: none;
+        }
+        
+        .equipment-item {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            background: var(--light-bg);
+            border-radius: 5px;
+            border-left: 3px solid var(--secondary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
+        }
+        
+        .equipment-item:hover {
+            transform: translateX(5px);
+            background: #eef5fc;
+        }
+        
+        .equipment-name {
+            font-weight: 500;
+        }
+        
+        .equipment-qty {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        /* Badges d'état */
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        .status-operational {
+            background: var(--success-color);
+            color: white;
+        }
+        
+        .status-repair {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .status-failed {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        /* Tableau de résumé */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        
+        .summary-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .summary-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .summary-table tr:nth-child(even) {
+            background: var(--light-bg);
+        }
+        
+        .summary-table tr:hover {
+            background: #eef5fc;
+        }
+        
+        /* Section besoins */
+        .needs-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .needs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .need-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 1.2rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+        
+        .need-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .need-priority {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+        
+        .priority-high {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .priority-medium {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .priority-low {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        /* Informations administratives */
+        .admin-info {
+            background: var(--dark-bg);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .admin-item {
+            margin-bottom: 1rem;
+        }
+        
+        .admin-label {
+            font-weight: 600;
+            color: #bdc3c7;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .admin-value {
+            font-size: 1.1rem;
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .summary-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .needs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Boutons d'action */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-print {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-export {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .inventory-section, .needs-section, .admin-info {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>ÉGLISE CAMPS D'ADORATION CANAAN</h1>
+            <p class="subtitle">Inventaire du Matériel Audio et Musical</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Section I: Système de Sonorisation -->
+        <section class="inventory-section">
+            <h2>I. SYSTÈME DE SONORISATION</h2>
+            
+            <h3>A. Haut-parleurs (Baffles)</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Double Bass (GBL)</span>
+                    <span class="equipment-qty">2</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Medium (GBL)</span>
+                    <span class="equipment-qty">4</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Haut-parleurs de 15" lanceur (GBL)</span>
+                    <span class="equipment-qty">2</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Structures de haut-parleurs de 15" enchaînées (GBL)</span>
+                    <span class="equipment-qty">2 structures</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Retours de scène de 15" (GBL)</span>
+                    <span class="equipment-qty">2</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Retours de scène de 12" (GBL)</span>
+                    <span class="equipment-qty">6</span>
+                </li>
+            </ul>
+            
+            <h3>B. Amplificateurs de puissance</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">EV P-6300</span>
+                    <span class="equipment-qty">1 <span class="status-badge status-operational">Opérationnel</span></span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">EV P-7300</span>
+                    <span class="equipment-qty">1 <span class="status-badge status-operational">Opérationnel</span></span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Pro Hero Sound P-5000</span>
+                    <span class="equipment-qty">3 <span class="status-badge status-operational">Opérationnel</span></span>
+                </li>
+            </ul>
+            
+            <h3>C. Périphériques de traitement audio</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Équaliseur</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Filtre</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Compresseur</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+            </ul>
+            
+            <h3>D. Tables de mixage</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Yamaha 32 pistes</span>
+                    <span class="equipment-qty">2 <span class="status-badge status-repair">En réparation</span></span>
+                </li>
+            </ul>
+            
+            <h3>E. Amplificateurs d'instruments</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Ampli guitare solo</span>
+                    <span class="equipment-qty">1 <span class="status-badge status-operational">Opérationnel</span></span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Ampli basse</span>
+                    <span class="equipment-qty">1 <span class="status-badge status-operational">Opérationnel</span></span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Ampli piano</span>
+                    <span class="equipment-qty">1 <span class="status-badge status-failed">En panne</span></span>
+                </li>
+            </ul>
+        </section>
+        
+        <!-- Section II: Instruments de Musique -->
+        <section class="inventory-section">
+            <h2>II. INSTRUMENTS DE MUSIQUE</h2>
+            
+            <h3>A. Instruments à percussion</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Batterie acoustique (TORNADO BY MAPEX)</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Pad de batterie électronique</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Conga</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Talking Drum</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+            </ul>
+            
+            <h3>B. Instruments à vent</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Trompettes Yamaha</span>
+                    <span class="equipment-qty">2</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Saxophone ténor</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+            </ul>
+            
+            <h3>C. Instruments à cordes</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Guitare basse</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Guitares solo</span>
+                    <span class="equipment-qty">2</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Pédale pour guitare solo</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+            </ul>
+            
+            <h3>D. Instruments à clavier</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Piano Yamaha PSR-600</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Piano Yamaha PSR-E473</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+            </ul>
+        </section>
+        
+        <!-- Section III: Microphones et Accessoires -->
+        <section class="inventory-section">
+            <h2>III. MICROPHONES ET ACCESSOIRES</h2>
+            
+            <h3>A. Microphones</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Microphones (modèle or)</span>
+                    <span class="equipment-qty">3</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Microphone sans fil Rlacky AK-839</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Microphone sans fil GBL</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Micro sans fil à bec (pour discours)</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+            </ul>
+            
+            <h3>B. Supports de microphone</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Pieds de microphone gris</span>
+                    <span class="equipment-qty">6</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Pieds de microphone noir</span>
+                    <span class="equipment-qty">2</span>
+                </li>
+            </ul>
+        </section>
+        
+        <!-- Section IV: Câblage et Connectique -->
+        <section class="inventory-section">
+            <h2>IV. CÂBLAGE ET CONNECTIQUE</h2>
+            
+            <h3>A. Câbles audio</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Multi-paire (câble multipaire)</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Câbles XLR longs</span>
+                    <span class="equipment-qty">13</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Câbles en Y (Y-cable)</span>
+                    <span class="equipment-qty">2</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Fiches Canon Jack (XLR male)</span>
+                    <span class="equipment-qty">6</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Fiche Jack</span>
+                    <span class="equipment-qty">1</span>
+                </li>
+            </ul>
+            
+            <h3>B. Connectiques</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Fiches connectiques</span>
+                    <span class="equipment-qty">10</span>
+                </li>
+            </ul>
+            
+            <h3>C. Câbles haut-parleur</h3>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Fils haut-parleur avec 4 sorties (par fil)</span>
+                    <span class="equipment-qty">2</span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Fils haut-parleur avec 2 sorties (par fil)</span>
+                    <span class="equipment-qty">10</span>
+                </li>
+            </ul>
+        </section>
+        
+        <!-- Section V: État du Matériel -->
+        <section class="inventory-section">
+            <h2>V. ÉTAT DU MATÉRIEL</h2>
+            <ul class="equipment-list">
+                <li class="equipment-item">
+                    <span class="equipment-name">Tables de mixage Yamaha 32 pistes</span>
+                    <span class="equipment-qty">2 <span class="status-badge status-failed">En panne</span></span>
+                </li>
+                <li class="equipment-item">
+                    <span class="equipment-name">Ampli pour piano</span>
+                    <span class="equipment-qty">1 <span class="status-badge status-failed">En panne</span></span>
+                </li>
+            </ul>
+        </section>
+        
+        <!-- Section VI: Résumé Quantitatif -->
+        <section class="inventory-section">
+            <h2>VI. RÉSUMÉ QUANTITATIF</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Catégorie</th>
+                        <th>Quantité</th>
+                        <th>État fonctionnel</th>
+                        <th>Remarques</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Enceintes</td>
+                        <td>19 unités</td>
+                        <td>Toutes opérationnelles</td>
+                        <td>GBL majoritaire</td>
+                    </tr>
+                    <tr>
+                        <td>Amplis puissance</td>
+                        <td>5 unités</td>
+                        <td>Tous opérationnels</td>
+                        <td>2 marques différentes</td>
+                    </tr>
+                    <tr>
+                        <td>Tables mixage</td>
+                        <td>2 unités</td>
+                        <td>0 opérationnelles</td>
+                        <td>En réparation</td>
+                    </tr>
+                    <tr>
+                        <td>Instruments</td>
+                        <td>15 unités</td>
+                        <td>14 opérationnels</td>
+                        <td>1 ampli piano HS</td>
+                    </tr>
+                    <tr>
+                        <td>Microphones</td>
+                        <td>8 unités</td>
+                        <td>Tous opérationnels</td>
+                        <td>Mix filaire/sans fil</td>
+                    </tr>
+                    <tr>
+                        <td>Câbles</td>
+                        <td>34 unités</td>
+                        <td>Tous opérationnels</td>
+                        <td>Organisation requise</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <!-- Section VII: Besoins -->
+        <section class="needs-section">
+            <h2>VII. BESOINS IDENTIFIÉS</h2>
+            <div class="needs-grid">
+                <div class="need-card">
+                    <div class="need-priority priority-high">Haute Priorité</div>
+                    <h3>Micro sans fil</h3>
+                    <p>Pour les chorales, prédicateurs et animations.</p>
+                </div>
+                <div class="need-card">
+                    <div class="need-priority priority-high">Haute Priorité</div>
+                    <h3>Table numérique XR18</h3>
+                    <p>Remplacement des tables Yamaha défectueuses.</p>
+                </div>
+                <div class="need-card">
+                    <div class="need-priority priority-medium">Moyenne Priorité</div>
+                    <h3>Kit Batterie Pro</h3>
+                    <p>Amélioration de la section rythmique.</p>
+                </div>
+                <div class="need-card">
+                    <div class="need-priority priority-medium">Moyenne Priorité</div>
+                    <h3>Deux Mono BASS</h3>
+                    <p>Meilleur retour pour les musiciens.</p>
+                </div>
+                <div class="need-card">
+                    <div class="need-priority priority-high">Haute Priorité</div>
+                    <h3>Ampli de Puissance</h3>
+                    <p>Renforcement du système de sonorisation.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section VIII: Informations Administratives -->
+        <section class="admin-info">
+            <h2>VIII. INFORMATIONS ADMINISTRATIVES</h2>
+            <div class="admin-grid">
+                <div class="admin-item">
+                    <div class="admin-label">Date de l'inventaire</div>
+                    <div class="admin-value">12/01/2026</div>
+                </div>
+                <div class="admin-item">
+                    <div class="admin-label">Effectué par</div>
+                    <div class="admin-value">TADOUDJE LEAS</div>
+                </div>
+                <div class="admin-item">
+                    <div class="admin-label">Prochain contrôle prévu</div>
+                    <div class="admin-value">À déterminer</div>
+                </div>
+                <div class="admin-item">
+                    <div class="admin-label">Version de l'inventaire</div>
+                    <div class="admin-value">1.0</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Boutons d'action -->
+        <div class="action-buttons">
+            <button class="btn btn-print" onclick="window.print()">
+                <span>🖨️</span> Imprimer l'inventaire
+            </button>
+            <button class="btn btn-export" onclick="exportInventory()">
+                <span>📥</span> Exporter en PDF
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Fonction pour exporter l'inventaire (simulation)
+        function exportInventory() {
+            alert("Fonctionnalité d'export PDF - À implémenter avec une bibliothèque comme jsPDF");
+            // Ici, vous pourriez intégrer jsPDF pour générer un PDF
+        }
+        
+        // Animation au défilement
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.inventory-section, .needs-section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => {
+                section.style.opacity = 0;
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
